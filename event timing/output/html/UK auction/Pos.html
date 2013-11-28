@@ -1,0 +1,135 @@
+<!doctype>
+<head>
+  <title>Pos</title>
+  <!-- Original source of rickshaw.min.css is https://github.com/shutterstock/rickshaw/rickshaw.min.css-->    
+  <link rel="stylesheet" href='css/rickshaw.min.css'>
+  <!-- Original source of jquery-ui.css is https://github.com/ramnathv/rCharts/master/inst/libraries/rickshaw/css/jquery-ui.css-->    
+  <link rel="stylesheet" href='css/jquery-ui.css'>
+  <!-- Original source of d3.v3.min.js is http://d3js.org/d3.v3.min.js-->
+  <script src='lib/d3.v3.min.js' charset="utf-8"></script>
+  <!-- Original source of jquery.min.js is https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js-->
+  <script src='lib/jquery.min.js'></script>
+  <!-- Original source of jquery-ui.min.js is https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js-->
+  <script src='lib/jquery-ui.min.js'></script>  
+  <!-- Original source of rickshaw.min.js is https://github.com/shutterstock/rickshaw/rickshaw.min.js--> 
+  <script src='lib/rickshaw.min.js'></script>
+  
+   
+<style>
+.chart_container {
+  position: relative;
+  display: inline-block;
+   font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  font: 10px sans-serif;
+}
+#chart {
+    display: inline-block;
+    margin-left: 40px;
+    margin-top: 70px;
+}
+#y_axis {
+        position: absolute;
+        margin-bottom: 0;
+        margin-top: 70px;
+        width: 40px;
+}
+#x_axis {
+  position: absolute;
+  margin-left: 40px;
+ }            
+#legend {
+        position: relative;
+        margin-left: 10px;
+        margin-top: 70px;
+        margin-right: -160px;
+        vertical-align: top;
+}
+#slider {
+        margin-left: 40px;
+        margin-top: 30px;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+<span style="color:brown;font-style:italic;font:sans-serif;">IDPResearch: Version 0.1.9</span>
+<hr>
+<h1><span style="color:black;font:sans-serif;">Pos</span></h1>
+</header>
+
+<div class="chart_container">
+  <div id="y_axis"></div>
+  <div id="chart"></div>
+  <div id="x_axis"></div>
+  <div id="slider"></div>
+</div>
+
+<div class="chart_container" id ="legend">
+</div>
+
+<script>
+
+var palette = new Rickshaw.Color.Palette( {scheme: 'spectrum14'} );
+
+d3.json('data/Pos_data.json', function(error, json) {
+
+var graph = new Rickshaw.Graph( {
+                element: document.querySelector("#chart"),
+                min: 'auto',
+                width: 720.0,
+                height: 375.0,
+                renderer: 'line',
+                series: [
+                         {name: '2006-11-29 00:00:00',
+                          color: palette.color(),
+                          data: json[0].data}
+                          ]
+                })
+
+
+
+var x_axis = new Rickshaw.Graph.Axis.Time( { graph: graph } );
+
+
+
+
+
+var y_axis = new Rickshaw.Graph.Axis.Y( {
+        graph: graph,
+        orientation: 'left',
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+        element: document.getElementById('y_axis')
+} );
+
+var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+    graph: graph,
+    
+} );
+
+var legend = new Rickshaw.Graph.Legend( {
+    graph: graph,
+    element: document.getElementById('legend')
+
+} );
+
+var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+    graph: graph,
+    legend: legend
+});
+
+var slider = new Rickshaw.Graph.RangeSlider( {
+    graph: graph,
+    element: $('#slider')
+} );
+
+graph.render();
+
+});
+
+</script>
+
+</body>
